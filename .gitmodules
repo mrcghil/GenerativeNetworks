@@ -4,3 +4,6 @@
 [submodule "Taming-Transformers"]
 	path = Taming-Transformers
 	url = https://github.com/CompVis/taming-transformers.git
+[submodule "vqgan_f16_16384"]
+	path = vqgan_f16_16384
+	url = https://huggingface.co/boris/vqgan_f16_16384
