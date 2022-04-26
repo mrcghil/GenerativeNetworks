@@ -131,4 +131,10 @@ dmypy.json
 # Dev Environment
 .vscode/
 VirtualEnv/
+
+# File types
 Resources/*.ckpt
+*.png
+*.jpeg
+*.jpg
+*.pth
