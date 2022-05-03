@@ -1,0 +1,77 @@
+Settings:
+  ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
+  Subfolder: ''
+  Model: 'vqgan_imagenet_f16_16384'
+  LearningRate: 0.01
+  MaxIterations: 2000
+  Dimensions:
+    - 500
+    - 500
+  InitialImageWeight: 0.
+  Seed: 555
+  Subject: 'monkey'
+  Mood: 'alien'
+  Style: 'brilliant colors'
+  AssembleString: False
+  FullString: ''
+  InitialImage: []
+  ObjectiveImage: []
+
+Randomize:
+  - 'Mood'
+  - 'Subject'
+  - 'Style'
+
+Combine:
+  - 'None'
+
+Elements:
+  Mood:
+    - 'scary'
+    - 'screaming'
+    - 'roaring'
+    - 'terrifying'
+    - 'horror'
+    - 'zombie'
+    - 'alien'
+
+  Subject:
+    - 'zebra'
+    - 'tiger'
+    - 'gorilla'
+    - 'panther'
+    - 'lion'
+    - 'tiger'
+    - 'koala'
+    - 'hippopotamus'
+    - 'deer'
+    - 'wolf'
+    - 'bison'
+    - 'kangaroo'
+    - 'penguin'
+    - 'polar bear'
+    - 'octopus'
+    - 'dolphin'
+    - 'whale'
+
+  Style:
+    - 'colorful illustration'
+    - 'saturated colors'
+    - 'brilliant colors'
+    - 'vintage illustration'
+
+  Seed:
+    - 5451
+    - 125
+    - -1
+    - 451637
+    - 113
+    - 420420
+    - 5124
+    - 1024
+
+  InitialWeight:
+    - 0
+    - 0.5
+    - 1
+
