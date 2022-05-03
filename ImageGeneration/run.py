@@ -1,99 +1,64 @@
 import os, gc
-# from custom_parser import *
+from custom_parser import *
 from VQGAN_and_CLIP import *
 
-results_path = os.path.join(os.path.dirname(__file__), os.pardir, 'Results')
-folder_counter_start = 19
-resources_path = os.path.join(os.path.dirname(__file__), os.pardir, 'vqgan_f16_16384')
-config_file = 'config.yaml'
-checkpoint_file = 'model.ckpt'
+NN_CHECKPOINT_PATH = os.path.join(os.path.dirname(__file__), os.pardir, 'vqgan_f16_16384')
+CONFIG_FILE = 'config.yaml'
+CHECKPOINT_FILE = 'model.ckpt'
+INTERVAL_IMAGE = 25
 
-# Art Generator Parameters
-# Examples text_prompts = ['unreal engine', 'center of the universe']
-descriptions = [
-    # "zombie panda illustration in saturated colors",
-    # "laughing panda illustation in saturated colors",
-    # "screaming kangaroo illustration in saturated colors",
-    # "scary koala illustration in saturated colors",
-    # "ferocious gorilla illustration in saturated colors",
-    # "thunder tiger illustration in saturated colors",
-    # "terrifying lemurs illustration in saturated colors",
-    # "terrifying octopus illustration in saturated colors",
-    # "terrifying peacock illustration in saturated colors",
-    # "screaming hippopotamus illustration in saturated colors",
-    'oil on canvas'
-]
-# Acceptable (500x500), Twitter (600x335), 
-height = 500  # @param {type:"number"}
-width = 500  # @param {type:"number"}
-# @param ["vqgan_imagenet_f16_16384", "vqgan_imagenet_f16_1024", "wikiart_1024", "wikiart_16384", "coco", "faceshq", "sflckr", "ade20k", "ffhq", "celebahq", "gumbel_8192"]
-model = "vqgan_imagenet_f16_16384"
-interval_image = 50  # @param {type:"number"}
-initial_image = [
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test06\large-Panda-photo.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test07\giantpandabamboodiet.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test08\kangaroo-stock.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test09\Koala.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test10\Gorilla1.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test11\Tiger1.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test12\Ring-tailed-Lemurs-540x350-1.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test13\Octopus1.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test14\Peacock1.jpg'),
-    # os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test15\Hippo1.jpg'),
-    os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test18\Anna.jpeg')
-]
-objective_image = [os.path.abspath('C:\WORKSPACES\ZINKY\GenerativeNetworks\Results\Test18\Anna.jpeg')]  # @param {type:"string"}
-seed = 524  # @param {type:"number"}
-max_iterations = 2000  # @param {type:"number"}
-init_image_weight = 0
+# 
 
-nombre_model = nombres_modelos[model]
-
-args = argparse.Namespace(
-    prompts = descriptions,
-    objective_image = objective_image,
-    noise_prompt_seeds = [],
-    noise_prompt_weights = [],
-    size = [width, width],
-    init_image = initial_image,
-    init_weight = init_image_weight,
-    clip_model = 'ViT-B/32',
-    vqgan_config = os.path.join(resources_path, config_file),
-    vqgan_checkpoint = os.path.join(resources_path, checkpoint_file),
-    step_size = 0.02,
-    cutn = 64,
-    cut_pow = 1.,
-    display_freq = interval_image,
-    seed = seed,
-)
-
-
-if model == "gumbel_8192":
-    is_gumbel = True
-else:
-    is_gumbel = False
-
-if seed == -1:
-    seed = None
-
-if initial_image == "None":
-    initial_image = None
-# elif initial_image and initial_image.lower().startswith("http"):
-#     initial_image = download_img(initial_image)
-
-
-if objective_image == "None" or not objective_image:
-    objective_image = []
-# else:
-#     objective_image = objective_image.split("|")
-#     objective_image = [image.strip() for image in objective_image]
-
-if initial_image != [] or objective_image != []:
-    input_images = True
+INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images.yaml'
+settings_dictionary = parse_input_yaml(INPUT_PATH)
+list_of_sims = generate_simulations(settings_dictionary, max_number = 5)
 
 # Run the generator
 
-for test_index, prompt in enumerate(args.prompts):
+for sim_index, sim in enumerate(simulation_list):
+    # creating the input structure for the arguments
+    args = argparse.Namespace(
+        prompt = sim.full_string,
+        objective_image = sim.objective_image,
+        noise_prompt_seeds = [],
+        noise_prompt_weights = [],
+        size = [sim.width, sim.height],
+        init_image = sim.initial_image,
+        init_weight = sim.initial_image_weight,
+        clip_model = 'ViT-B/32',
+        vqgan_config = os.path.join(NN_CHECKPOINT_PATH, CONFIG_FILE),
+        vqgan_checkpoint = os.path.join(NN_CHECKPOINT_PATH, CHECKPOINT_FILE),
+        step_size = sim.learning_rate,
+        cutn = 64,
+        cut_pow = 1.,
+        display_freq = INTERVAL_IMAGE,
+        seed = sim.seed,
+
+    )
+    descriptive_model_name = list_of_models[model]
+    if model == "gumbel_8192":
+        is_gumbel = True
+    else:
+        is_gumbel = False
+
+    if seed == -1:
+        seed = None
+
+    if initial_image == "None":
+        initial_image = None
+    # elif initial_image and initial_image.lower().startswith("http"):
+    #     initial_image = download_img(initial_image)
+
+
+    if objective_image == "None" or not objective_image:
+        objective_image = []
+    # else:
+    #     objective_image = objective_image.split("|")
+    #     objective_image = [image.strip() for image in objective_image]
+
+    if initial_image != [] or objective_image != []:
+        input_images = True
+
     # Device selection and clean memory
     if torch.cuda.is_available():
         device = torch.device('cuda:0')
@@ -139,7 +104,7 @@ for test_index, prompt in enumerate(args.prompts):
         z_max = model.quantize.embedding.weight.max(dim=0).values[None, :, None, None]
 
     if args.init_image:
-        pil_image = Image.open(args.init_image[test_index]).convert('RGB')
+        pil_image = Image.open(args.init_image[sim_index]).convert('RGB')
         pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         z, * \
             _ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
@@ -193,7 +158,7 @@ for test_index, prompt in enumerate(args.prompts):
         else:
             imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'title', 'None', {"prop_array_is_ordered": True, "prop_value_is_array": True})
         imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'i', str(i), {"prop_array_is_ordered": True, "prop_value_is_array": True})
-        imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'model', nombre_model, {"prop_array_is_ordered": True, "prop_value_is_array": True})
+        imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'model', descriptive_model_name, {"prop_array_is_ordered": True, "prop_value_is_array": True})
         imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'seed', str(seed), {"prop_array_is_ordered": True, "prop_value_is_array": True})
         imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'input_images', str(input_images), {"prop_array_is_ordered": True, "prop_value_is_array": True})
         # for frases in args.prompts:
@@ -205,7 +170,7 @@ for test_index, prompt in enumerate(args.prompts):
             "title": " | ".join(args.prompts) if args.prompts else None,
             "notebook": "VQGAN+CLIP",
             "i": i,
-            "model": nombre_model,
+            "model": descriptive_model_name,
             "seed": str(seed),
             "input_images": input_images
         }
@@ -233,7 +198,7 @@ for test_index, prompt in enumerate(args.prompts):
         img = np.array(out.mul(255).clamp(0, 255)[0].cpu().detach().numpy().astype(np.uint8))[:, :, :]
         img = np.transpose(img, (1, 2, 0))
         if i % 20 == 0:
-            filename = os.path.join(results_path, ''.join(['Test', f'{folder_counter_start:02}']), f'{i:05}.png')
+            filename = os.path.join(sim.save_path, f'{i:05}.png')
             imageio.imwrite(filename, np.array(img))
             add_stegano_data(filename)
             # add_xmp_data(filename)
