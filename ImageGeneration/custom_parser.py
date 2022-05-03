@@ -19,9 +19,9 @@ class Simulation(object):
 
     def __init__(self, settings: dict):
         self.results_path_base = settings['ResultPath']
-        self.subfolder = self.define_subfolder(self.results_path_base)
-        self.save_path = os.path.join(self.results_path_base, self.subfolder)
-        os.mkdir(self.save_path)
+        self.subfolder_keyword = settings['Subfolder']
+        self.subfolder = ''
+        self.save_path = ''
         self.model_name = settings['Model']
         if settings['FullString'] == '' or settings['AssembleString']:
             self.mood = settings['Mood']
@@ -66,15 +66,26 @@ class Simulation(object):
         return fullstring
     
     def to_dictionary(self):
-        attributes_to_save = attribute_dictionary.values
+        attributes_to_save = self.attribute_dictionary.values()
         dict_to_return = {}
         for item in attributes_to_save:
             dict_to_return[item] = getattr(self, item)
         return dict_to_return
 
     def save_sim_settings(self):
-        with open(os.path.join(self.save_path, 'SimSettings.yml'), 'w+') as f:
+        settings_path = os.path.join(self.save_path, 'SimSettings.yml')
+        with open(settings_path, 'w+') as f:
             yaml.dump(self.to_dictionary(), f, sort_keys = False, default_flow_style = False)
+            print(f'Simulation.save_sim_settings :: Saved settings {settings_path}')
+
+    def generate_path(self):
+        self.subfolder = self.define_subfolder(self.results_path_base, cue_name = self.subfolder_keyword)
+        self.save_path = os.path.join(self.results_path_base, self.subfolder)
+        try:
+            os.mkdir(self.save_path)
+            print(' '.join(['Simulation.generate_path :: Created ', self.save_path]))
+        except:
+            raise('Simulation.generate_path :: Path creation failed.')
 
     # TODO: Finish this method
     def validate_settings(self):
@@ -127,13 +138,13 @@ def generate_simulations(elements:dict, max_number:int = 10):
         simulation_list_comb = []
         # Define the combinations
         max_dimensions = [np.arange(len(elements['Elements'][varname])) for varname in comb_var_list]
-        combinations = itertools.product(*max_dimensions)
         # Apply combinations to all sims
         for sim in simulation_list_rand:
+            combinations = itertools.product(*max_dimensions)
             for combo in combinations:
-                new_combo_sim = sim.deepcopy()
+                new_combo_sim = copy.deepcopy(sim)
                 for index, varname in enumerate(comb_var_list):
-                    setattr(new_combo_sim, new_combo_sim.attribute_dictionary[varname], combo[index])
+                    setattr(new_combo_sim, new_combo_sim.attribute_dictionary[varname], elements['Elements'][varname][combo[index]])
                 simulation_list_comb.append(new_combo_sim)
         return simulation_list_comb
     else:

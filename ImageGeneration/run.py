@@ -2,20 +2,23 @@ import os, gc
 from custom_parser import *
 from VQGAN_and_CLIP import *
 
+# This will need to be moved to the input file
 NN_CHECKPOINT_PATH = os.path.join(os.path.dirname(__file__), os.pardir, 'vqgan_f16_16384')
 CONFIG_FILE = 'config.yaml'
 CHECKPOINT_FILE = 'model.ckpt'
 INTERVAL_IMAGE = 25
 
-# 
-
+# Input file parsing
 INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images.yaml'
 settings_dictionary = parse_input_yaml(INPUT_PATH)
-list_of_sims = generate_simulations(settings_dictionary, max_number = 5)
+list_of_sims = generate_simulations(settings_dictionary, max_number = 10)
 
 # Run the generator
 
-for sim_index, sim in enumerate(simulation_list):
+for sim_index, sim in enumerate(list_of_sims):
+    # Initialisation
+    sim.generate_path()
+    sim.save_sim_settings()
     # creating the input structure for the arguments
     args = argparse.Namespace(
         prompt = sim.full_string,
@@ -26,6 +29,7 @@ for sim_index, sim in enumerate(simulation_list):
         init_image = sim.initial_image,
         init_weight = sim.initial_image_weight,
         clip_model = 'ViT-B/32',
+        vqgan_model = 'vqgan_imagenet_f16_16384',
         vqgan_config = os.path.join(NN_CHECKPOINT_PATH, CONFIG_FILE),
         vqgan_checkpoint = os.path.join(NN_CHECKPOINT_PATH, CHECKPOINT_FILE),
         step_size = sim.learning_rate,
@@ -33,31 +37,27 @@ for sim_index, sim in enumerate(simulation_list):
         cut_pow = 1.,
         display_freq = INTERVAL_IMAGE,
         seed = sim.seed,
-
+        max_iterations = sim.max_iterations,
     )
-    descriptive_model_name = list_of_models[model]
-    if model == "gumbel_8192":
+    descriptive_model_name = list_of_models[args.vqgan_model]
+    # Switches based on the model selected
+    if args.vqgan_model == "gumbel_8192":
         is_gumbel = True
     else:
         is_gumbel = False
-
-    if seed == -1:
+    if args.seed == -1:
         seed = None
+    
+    if "None" in args.init_image:
+        initial_image = []
 
-    if initial_image == "None":
-        initial_image = None
-    # elif initial_image and initial_image.lower().startswith("http"):
-    #     initial_image = download_img(initial_image)
-
-
-    if objective_image == "None" or not objective_image:
+    if "None" in args.objective_image:
         objective_image = []
-    # else:
-    #     objective_image = objective_image.split("|")
-    #     objective_image = [image.strip() for image in objective_image]
 
     if initial_image != [] or objective_image != []:
         input_images = True
+    else:
+        input_images = False
 
     # Device selection and clean memory
     if torch.cuda.is_available():
@@ -66,9 +66,9 @@ for sim_index, sim in enumerate(simulation_list):
     else:
         device = torch.device('cpu')
     print('Using device:', device)
-
-    if prompt:
-        print('Using texts:', prompt)
+    # What is running now? 
+    if args.prompt:
+        print('Using texts:', args.prompt)
     if objective_image:
         print('Using image prompts:', objective_image)
     if args.seed is None:
@@ -103,7 +103,7 @@ for sim_index, sim in enumerate(simulation_list):
         z_min = model.quantize.embedding.weight.min(dim=0).values[None, :, None, None]
         z_max = model.quantize.embedding.weight.max(dim=0).values[None, :, None, None]
 
-    if args.init_image:
+    if initial_image != []:
         pil_image = Image.open(args.init_image[sim_index]).convert('RGB')
         pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         z, * \
@@ -125,12 +125,12 @@ for sim_index, sim in enumerate(simulation_list):
 
     pMs = []
 
-    for keyword in [prompt]:
+    for keyword in [args.prompt]:
         txt, weight, stop = parse_prompt(keyword)
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
         pMs.append(Prompt(embed, weight, stop).to(device))
 
-    for obj_image in args.objective_image:
+    for obj_image in objective_image:
         path, weight, stop = parse_prompt(obj_image)
         img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
         batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))
@@ -153,8 +153,8 @@ for sim_index, sim in enumerate(simulation_list):
     def add_xmp_data(nombrefichero):
         imagen = ImgTag(filename=nombrefichero)
         imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'creator', 'VQGAN+CLIP', {"prop_array_is_ordered": True, "prop_value_is_array": True})
-        if args.prompts:
-            imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'title', " | ".join(args.prompts), {"prop_array_is_ordered": True, "prop_value_is_array": True})
+        if args.prompt:
+            imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'title', args.prompt, {"prop_array_is_ordered": True, "prop_value_is_array": True})
         else:
             imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'title', 'None', {"prop_array_is_ordered": True, "prop_value_is_array": True})
         imagen.xmp.append_array_item(libxmp.consts.XMP_NS_DC, 'i', str(i), {"prop_array_is_ordered": True, "prop_value_is_array": True})
@@ -167,7 +167,7 @@ for sim_index, sim in enumerate(simulation_list):
 
     def add_stegano_data(filename):
         data = {
-            "title": " | ".join(args.prompts) if args.prompts else None,
+            "title": args.prompt,
             "notebook": "VQGAN+CLIP",
             "i": i,
             "model": descriptive_model_name,
@@ -219,12 +219,11 @@ for sim_index, sim in enumerate(simulation_list):
     try:
         while True:
             train(i)
-            if i == max_iterations:
+            if i == args.max_iterations:
                 break
             i += 1
     except KeyboardInterrupt:
         pass
-    
-    folder_counter_start += 1
+
 # Garbage collection
 gc.collect()
