@@ -131,6 +131,8 @@ dmypy.json
 # Dev Environment
 .vscode/
 VirtualEnv/
+# Outputs of the simulation process
+Results/*/*yml 
 
 # File types
 Resources/*.ckpt
