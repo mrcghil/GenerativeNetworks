@@ -1,0 +1,70 @@
+Settings:
+  ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
+  Subfolder: 'Combi_V2_'
+  Model: 'vqgan_imagenet_f16_16384'
+  LearningRate: 0.02
+  MaxIterations: 1000
+  Dimensions:
+    - 500
+    - 500
+  InitialImageWeight: 0.
+  Seed: 555
+  Subject: 'monkey'
+  Mood: 'alien'
+  Style: 'brilliant colors'
+  AssembleString: False
+  FullString: ''
+  InitialImage: []
+  ObjectiveImage: []
+
+Randomize:
+  - 'Mood'
+  - 'Subject'
+  - 'Style'
+
+Combine:
+  - 'InitialWeight'
+
+Elements:
+  Mood:
+    - 'scary'
+    - 'screaming'
+    - 'roaring'
+    - 'terrifying'
+    - 'horror'
+    - 'zombie'
+    - 'alien'
+
+  Subject:
+    - {'subject': 'zebras', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Zebras.jpg'], 'objective_image': []}
+    - {'subject': 'monkey', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\langur-monkey.jpg'], 'objective_image': []}
+    - {'subject': 'gorilla', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Gorilla1.jpg'], 'objective_image': []}
+    - {'subject': 'panther', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\panther.jpg'], 'objective_image': []}
+    - {'subject': 'lion', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Lion.jpg'], 'objective_image': []}
+    - {'subject': 'koala', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Koala.jpg'], 'objective_image': []}
+    - {'subject': 'hippopotamus', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Hippo1.jpg'], 'objective_image': []}
+    - {'subject': 'kangaroo', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\kangaroo-stock.jpg'], 'objective_image': []}
+    - {'subject': 'octopus', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\octopus1.jpg'], 'objective_image': []}
+    - {'subject': 'octopus', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\octopus2.jpg'], 'objective_image': []}
+
+  Style:
+    - 'colorful illustration'
+    - 'saturated colors'
+    - 'brilliant colors'
+    # - 'vintage illustration'
+
+  Seed:
+    - 5451
+    - 125
+    - -1
+    - 451637
+    - 113
+    - 420420
+    - 5124
+    - 1024
+
+  InitialWeight:
+    - 0
+    - 1
+    # - 10
+

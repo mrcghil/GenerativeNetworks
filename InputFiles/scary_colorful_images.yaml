@@ -1,9 +1,9 @@
 Settings:
   ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
-  Subfolder: ''
+  Subfolder: 'Combi_V1_'
   Model: 'vqgan_imagenet_f16_16384'
-  LearningRate: 0.01
-  MaxIterations: 2000
+  LearningRate: 0.02
+  MaxIterations: 1700
   Dimensions:
     - 500
     - 500
@@ -14,8 +14,8 @@ Settings:
   Style: 'brilliant colors'
   AssembleString: False
   FullString: ''
-  InitialImage: []
-  ObjectiveImage: []
+  InitialImage: ['None']
+  ObjectiveImage: ['None']
 
 Randomize:
   - 'Mood'
@@ -23,7 +23,7 @@ Randomize:
   - 'Style'
 
 Combine:
-  - 'None'
+  - 'Seed'
 
 Elements:
   Mood:
