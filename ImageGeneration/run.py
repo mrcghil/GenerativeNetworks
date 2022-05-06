@@ -9,7 +9,7 @@ CHECKPOINT_FILE = 'model.ckpt'
 INTERVAL_IMAGE = 25
 
 # Input file parsing
-INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images.yaml'
+INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_feed.yaml'
 settings_dictionary = parse_input_yaml(INPUT_PATH)
 list_of_sims = generate_simulations(settings_dictionary, max_number = 10)
 
@@ -17,6 +17,7 @@ list_of_sims = generate_simulations(settings_dictionary, max_number = 10)
 
 for sim_index, sim in enumerate(list_of_sims):
     # Initialisation
+    print(f' ImageGeneration.run :: running image gen {sim_index + 1} of {len(list_of_sims)}')
     sim.generate_path()
     sim.save_sim_settings()
     # creating the input structure for the arguments
@@ -47,14 +48,8 @@ for sim_index, sim in enumerate(list_of_sims):
         is_gumbel = False
     if args.seed == -1:
         seed = None
-    
-    if "None" in args.init_image:
-        initial_image = []
 
-    if "None" in args.objective_image:
-        objective_image = []
-
-    if initial_image != [] or objective_image != []:
+    if args.init_image != [] or args.objective_image != []:
         input_images = True
     else:
         input_images = False
@@ -66,11 +61,14 @@ for sim_index, sim in enumerate(list_of_sims):
     else:
         device = torch.device('cpu')
     print('Using device:', device)
-    # What is running now? 
-    if args.prompt:
-        print('Using texts:', args.prompt)
-    if objective_image:
-        print('Using image prompts:', objective_image)
+
+    # Quick summary of what we are running now. 
+    if args.prompt :
+        print('Using texts :: ', args.prompt)
+    if args.init_image != []:
+        print('Using initial images :: ', ' '.join(args.init_image))
+    if args.objective_image != []:
+        print('Using objective images :: ', ' '.join(args.objective_image))
     if args.seed is None:
         seed = torch.seed()
     else:
@@ -103,8 +101,8 @@ for sim_index, sim in enumerate(list_of_sims):
         z_min = model.quantize.embedding.weight.min(dim=0).values[None, :, None, None]
         z_max = model.quantize.embedding.weight.max(dim=0).values[None, :, None, None]
 
-    if initial_image != []:
-        pil_image = Image.open(args.init_image[sim_index]).convert('RGB')
+    if args.init_image != []:
+        pil_image = Image.open(args.init_image[0]).convert('RGB')
         pil_image = pil_image.resize((sideX, sideY), Image.LANCZOS)
         z, * \
             _ = model.encode(TF.to_tensor(pil_image).to(device).unsqueeze(0) * 2 - 1)
@@ -130,7 +128,7 @@ for sim_index, sim in enumerate(list_of_sims):
         embed = perceptor.encode_text(clip.tokenize(txt).to(device)).float()
         pMs.append(Prompt(embed, weight, stop).to(device))
 
-    for obj_image in objective_image:
+    for obj_image in args.objective_image:
         path, weight, stop = parse_prompt(obj_image)
         img = resize_image(Image.open(path).convert('RGB'), (sideX, sideY))
         batch = make_cutouts(TF.to_tensor(img).unsqueeze(0).to(device))

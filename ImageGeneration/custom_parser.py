@@ -1,8 +1,5 @@
 import yaml, os, itertools, copy
 import numpy as np
-
-input_path = os.path.abspath('C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images.yaml')
-
 class Simulation(object):
     attribute_dictionary = {
         'Mood': 'mood',
@@ -87,6 +84,10 @@ class Simulation(object):
         except:
             raise('Simulation.generate_path :: Path creation failed.')
 
+    def import_dictionary(self, settings_dictionary:dict = {}):
+        for key, value in settings_dictionary.items():
+            setattr(self, key, value)
+
     # TODO: Finish this method
     def validate_settings(self):
         self.is_valid = True
@@ -126,7 +127,10 @@ def generate_simulations(elements:dict, max_number:int = 10):
         for i in range(2 * max_number):
             new_random_sim = copy.deepcopy(base_sim)
             for item in rand_var_list:
-                setattr(new_random_sim, new_random_sim.attribute_dictionary[item], elements['Elements'][item][random_indices[item][0,i]])
+                if isinstance(elements['Elements'][item][random_indices[item][0,i]], dict):
+                    new_random_sim.import_dictionary(elements['Elements'][item][random_indices[item][0,i]])
+                else:
+                    setattr(new_random_sim, new_random_sim.attribute_dictionary[item], elements['Elements'][item][random_indices[item][0,i]])
             setattr(new_random_sim, 'full_string', new_random_sim.assemble_fullstring(new_random_sim.mood, new_random_sim.subject, new_random_sim.style))
             simulation_list_rand.append(new_random_sim)
         # TODO: Check for uniqueness and reduce the number of sims to max_number
@@ -144,7 +148,10 @@ def generate_simulations(elements:dict, max_number:int = 10):
             for combo in combinations:
                 new_combo_sim = copy.deepcopy(sim)
                 for index, varname in enumerate(comb_var_list):
-                    setattr(new_combo_sim, new_combo_sim.attribute_dictionary[varname], elements['Elements'][varname][combo[index]])
+                    if isinstance(elements['Elements'][varname][combo[index]], dict):
+                        new_combo_sim.import_dictionary(elements['Elements'][varname][combo[index]])
+                    else:
+                        setattr(new_combo_sim, new_combo_sim.attribute_dictionary[varname], elements['Elements'][varname][combo[index]])
                 simulation_list_comb.append(new_combo_sim)
         return simulation_list_comb
     else:
@@ -152,6 +159,7 @@ def generate_simulations(elements:dict, max_number:int = 10):
         return simulation_list_comb
 
 if __name__ == "__main__":
+    input_path = os.path.abspath('C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_feed.yaml')
     print(''.join(['custom_parser :: Loading file : ', input_path]))
     settings_dictionary = parse_input_yaml(input_path)
     list_of_sims = generate_simulations(settings_dictionary, max_number = 5)
@@ -160,7 +168,7 @@ if __name__ == "__main__":
         print('String : ' + sim.full_string)
         if sim.initial_image != []:
             for img in sim.initial_image:
-                print('Initial Image / weight: ' + img + ' / ' + str(sim.initial_image_weight))
+                print('Initial Image / weight : ' + img + ' / ' + str(sim.initial_image_weight))
         else:
             print('No initial image is present.')
         print('Seed : ' + str(sim.seed))
