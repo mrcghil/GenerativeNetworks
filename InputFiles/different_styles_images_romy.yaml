@@ -1,0 +1,64 @@
+Settings:
+  ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
+  Subfolder: 'Combi_Vromy_'
+  Model: 'vqgan_imagenet_f16_16384'
+  LearningRate: 0.02
+  MaxIterations: 600
+  Dimensions:
+    - 500
+    - 500
+  InitialImageWeight: 0.3
+  Seed: 555
+  Subject: ''
+  Mood: ''
+  Style: ''
+  AssembleString: False
+  FullString: ''
+  InitialImage: []
+  ObjectiveImage: []
+
+Randomize:
+  - 'None'
+
+Combine:
+  - 'Subject'
+  - 'Style'
+  - 'InitialWeight'
+
+Elements:
+  Mood:
+    - 'happy'
+
+  Subject:
+    - {'subject': 'happy girl with red dress in the countryside', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl with a red dress', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl with a red dress in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'field of grain with a girl', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+
+
+  Style:
+    - 'in style of colorful illustration'
+    - 'in style of brilliant colors'
+    - 'in style of oil on canvas'
+    - 'in style of pastel color'
+    - 'in style of Picasso'
+    - 'in style of Fauvism'
+    - 'in style of Futurism'
+
+  Seed:
+    - 5451
+    - 125
+    - -1
+    - 451637
+    - 113
+    - 420420
+    - 5124
+    - 1024
+
+  InitialWeight:
+    - 0.
+    - 0.25
+    - 0.5
+    # - 10
+

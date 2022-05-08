@@ -1,13 +1,13 @@
 Settings:
   ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
-  Subfolder: 'Combi_V2_'
+  Subfolder: 'Combi_V3_'
   Model: 'vqgan_imagenet_f16_16384'
   LearningRate: 0.02
-  MaxIterations: 1000
+  MaxIterations: 800
   Dimensions:
     - 500
     - 500
-  InitialImageWeight: 0.
+  InitialImageWeight: 0.3
   Seed: 555
   Subject: 'monkey'
   Mood: 'alien'
@@ -18,25 +18,26 @@ Settings:
   ObjectiveImage: []
 
 Randomize:
+  - 'None'
+
+Combine:
   - 'Mood'
   - 'Subject'
   - 'Style'
-
-Combine:
-  - 'InitialWeight'
 
 Elements:
   Mood:
     - 'scary'
     - 'screaming'
-    - 'roaring'
-    - 'terrifying'
+    # - 'roaring'
+    # - 'terrifying'
     - 'horror'
-    - 'zombie'
+    # - 'zombie'
     - 'alien'
 
   Subject:
     - {'subject': 'zebras', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Zebras.jpg'], 'objective_image': []}
+    - {'subject': 'giraffe', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\giraffe.jpg'], 'objective_image': []}
     - {'subject': 'monkey', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\langur-monkey.jpg'], 'objective_image': []}
     - {'subject': 'gorilla', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Gorilla1.jpg'], 'objective_image': []}
     - {'subject': 'panther', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\panther.jpg'], 'objective_image': []}
@@ -64,7 +65,7 @@ Elements:
     - 1024
 
   InitialWeight:
-    - 0
-    - 1
+    - 0.
+    - 0.5
     # - 10
 

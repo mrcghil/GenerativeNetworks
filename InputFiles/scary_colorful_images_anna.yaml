@@ -1,0 +1,68 @@
+Settings:
+  ResultPath: 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\Results'
+  Subfolder: 'Combi_Vanna_'
+  Model: 'vqgan_imagenet_f16_16384'
+  LearningRate: 0.02
+  MaxIterations: 2000
+  Dimensions:
+    - 500
+    - 500
+  InitialImageWeight: 0.
+  Seed: 555
+  Subject: 'building site with cranes in the sunset'
+  Mood: ''
+  Style: ''
+  AssembleString: False
+  FullString: ''
+  InitialImage: []
+  ObjectiveImage: []
+
+Randomize:
+  - 'None'
+
+Combine:
+  - 'Subject'
+  - 'Seed'
+
+Elements:
+  Mood:
+    - 'scary'
+    - 'screaming'
+    # - 'roaring'
+    # - 'terrifying'
+    - 'horror'
+    # - 'zombie'
+    - 'alien'
+
+  Subject:
+    - 'building site with cranes in the sunset'
+    - 'building site with cranes at dusk'
+    - 'decadent industrial building'
+    - 'industrial building in ruins'
+    - 'fruit in a basket'
+    - 'medieval castle in the fog'
+    - 'electricity pylons in countryside'
+
+  Style:
+    - 'colorful illustration'
+    - 'saturated colors'
+    - 'brilliant colors'
+    # - 'vintage illustration'
+
+  Seed:
+    - 5451
+    - 125
+    - -1
+    - 451637
+    - 113
+    - 420420
+    - 5124
+    - 1024
+    - 5879834
+    - 959834039
+
+  InitialWeight:
+    - 0.
+    - 0.5
+    # - 10
+
