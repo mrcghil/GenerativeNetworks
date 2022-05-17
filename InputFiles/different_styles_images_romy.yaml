@@ -30,11 +30,16 @@ Elements:
     - 'happy'
 
   Subject:
-    - {'subject': 'happy girl with red dress in the countryside', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
-    - {'subject': 'girl with a red dress', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
-    - {'subject': 'girl with a red dress in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
-    - {'subject': 'field of grain with a girl', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
-    - {'subject': 'girl in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    # - {'subject': 'happy girl with red dress in the countryside', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    # - {'subject': 'girl with a red dress', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    # - {'subject': 'girl with a red dress in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    # - {'subject': 'field of grain with a girl', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    # - {'subject': 'girl in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl with sunglasses in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl with sunglasses and red dress in nature', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+    - {'subject': 'girl with sunglasses in a field of grain', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Romy_field.jpg'], 'objective_image': []}
+
+
 
 
   Style:
