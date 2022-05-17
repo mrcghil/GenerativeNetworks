@@ -59,7 +59,7 @@ class Simulation(object):
 
     @staticmethod
     def assemble_fullstring(_mood:str, _subject:str, _style:str) -> str:
-        fullstring = ' '.join([_mood, _subject, 'in', _style])
+        fullstring = ' '.join([_mood, _subject, _style])
         return fullstring
     
     def to_dictionary(self):
@@ -152,6 +152,7 @@ def generate_simulations(elements:dict, max_number:int = 10):
                         new_combo_sim.import_dictionary(elements['Elements'][varname][combo[index]])
                     else:
                         setattr(new_combo_sim, new_combo_sim.attribute_dictionary[varname], elements['Elements'][varname][combo[index]])
+                setattr(new_combo_sim, 'full_string', new_combo_sim.assemble_fullstring(new_combo_sim.mood, new_combo_sim.subject, new_combo_sim.style))
                 simulation_list_comb.append(new_combo_sim)
         return simulation_list_comb
     else:
@@ -159,7 +160,7 @@ def generate_simulations(elements:dict, max_number:int = 10):
         return simulation_list_comb
 
 if __name__ == "__main__":
-    input_path = os.path.abspath('C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_feed.yaml')
+    input_path = os.path.abspath('C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_surfing.yaml')
     print(''.join(['custom_parser :: Loading file : ', input_path]))
     settings_dictionary = parse_input_yaml(input_path)
     list_of_sims = generate_simulations(settings_dictionary, max_number = 5)

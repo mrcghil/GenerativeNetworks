@@ -1,0 +1,67 @@
+Settings:
+  ResultPath: '\\groups-server\groups\Engineering\Public\MEG\SURFING'
+  Subfolder: 'Results_V0_'
+  Model: 'vqgan_imagenet_f16_16384'
+  LearningRate: 0.02
+  MaxIterations: 600
+  Dimensions:
+    - 500
+    - 500
+  InitialImageWeight: 0.25
+  Seed: 555
+  Subject: ''
+  Mood: ''
+  Style: ''
+  AssembleString: False
+  FullString: ''
+  InitialImage: []
+  ObjectiveImage: []
+
+Randomize:
+  - 'None'
+
+Combine:
+  - 'Subject'
+  - 'Style'
+
+Elements:
+  Mood:
+    - 'scary'
+    - 'funny'
+
+  Subject:
+    - {'subject': 'girl with a surfboard in the sunset', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Surf_Cartoon.jpg'], 'objective_image': []}
+    - {'subject': 'surfing in the ocean', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Surf_Man_Realistc.jpg'], 'objective_image': []}
+    - {'subject': 'surfing a big wave', 'initial_image': ['C:\WORKSPACES\ZINKY\GenerativeNetworks\InputFiles\ImageCollection\Surfer_Man_2.jpg'], 'objective_image': []}
+    - {'subject': 'girl surfing a big wave', 'max_iterations': 2000}
+    - {'subject': 'perfect day for a surfer', 'max_iterations': 2000}
+    - {'subject': 'beautiful day in the waves', 'max_iterations': 2000}
+    - {'subject': 'surfing trick on a tsunami', 'max_iterations': 2000}
+
+  Style:
+    - 'in style of colorful illustration'
+    - 'in style of brilliant colors'
+    - 'in oil on canvas'
+    - 'in style of cartoon'
+    - 'in style of Picasso'
+    - 'in style of Fauvism'
+    - 'in style of Futurism'
+    - 'in style of pop art'
+
+  Seed:
+    - 5451
+    - 125
+    - -1
+    - 451637
+    - 113
+    - 420420
+    - 5124
+    - 1024
+    - 5879834
+    - 959834039
+
+  InitialWeight:
+    # - 0.
+    - 0.1
+    # - 10
+

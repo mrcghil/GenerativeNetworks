@@ -9,7 +9,7 @@ CHECKPOINT_FILE = 'model.ckpt'
 INTERVAL_IMAGE = 25
 
 # Input file parsing
-INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_feed.yaml'
+INPUT_PATH = 'C:\\WORKSPACES\\ZINKY\\GenerativeNetworks\\InputFiles\\scary_colorful_images_surfing.yaml'
 settings_dictionary = parse_input_yaml(INPUT_PATH)
 list_of_sims = generate_simulations(settings_dictionary, max_number = 10)
 
